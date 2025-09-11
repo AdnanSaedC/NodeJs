@@ -1,0 +1,18 @@
+backend is nothing but how server and database interact with each other
+
+server is a softaware which serves 24*7
+
+server communicates through port (which is nothing but hardware + softeare which allows transfer of data)
+
+javascript can't able to access file since it was designed for browser
+
+nodejs gives javascipt all these powers and it is possible because it is bundle of javascript 
+and other third party services like lubuv (which is written in c and helps in I/O commmunication),crypto
+
+nodejs and npm are two diiferent things 
+
+so nodejs helps you run js without browser thus it helps in other tings also
+like file management,networks,os etc (which browser can't)
+and npm is used to just download,update,share and manage node packges
+
+remember nodejs is an engine which helps to use a language called js 

@@ -18,8 +18,7 @@
  * libuv binds all the req and gives an object and you do the things
  * u want since its an object
  * 
- * response has two things head and body
- * head is like meta data and body is like content
+ *
  *  */
 
 
@@ -48,7 +47,62 @@ const path = require("path");
 const port = 3000;
 
 //we are creating a server and telling it how to behave
-const server= http.createServer();
+const server= http.createServer((request,response)=>{
+    console.log("server got the access");
+
+    // const filePathOfTheFileToBeDisplayed
+    let filePath = String(path.join(__dirname,request.url === "/" ? "index.html" : request.url))
+    let filePathLength = (String(filePath).length)-1;
+
+    //lets optimize for if person not giving the .html extension
+        if(filePath[filePathLength-4] != '.' && filePath[filePathLength-3] !='h'
+            && filePath[filePathLength-2] !='t' && filePath[filePathLength-1] !='m' && filePath[filePathLength] !='l'
+        ){
+            filePath=String(filePath)+".html";
+        }
+    
+    
+    
+    //what it does it user/.../node(__using __dirname) if 
+    //req url after port contain / it will give index.html if not then what is mentioned ther like
+    //about.html
+
+    //lets tell the serer what king of data they can expect from us using extname function
+    //it will tell its .html,.css etc
+    const extName = String(path.extname(filePath)).toLowerCase();
+
+    //this is type which u r setting that these type of ext are allowed in my server
+    //this is for response head u will get to know in a bit
+    const mimeTypes={
+        ".html": "text/html",
+        ".css": "text/css",
+        ".js": "text/javascript",
+        ".png": "text/png",
+    }
+
+    //now extracting the ext in real time
+    const contentType = mimeTypes[extName] || 'application/octet-stream'
+    //app it a generic type
+
+    //error first in the parameter since we are dealing witth server
+    fileSystem.readFile(filePath,(error,content)=>{
+        if(error){
+            if(error.code === "ENOENT"){
+                //ENOENT file not found
+                response.writeHead(404,{"Content-Type":"text/html"})
+                response.end("File not found brooo")
+            }
+        }
+        else{
+            // response has two things head and body
+            //head is like meta data and body is like content
+            response.writeHead(200,{"Content-Type":contentType})
+            //head and 200 is the status code
+            response.end(content,"utf-8");
+            //utf-8 tell that the content in english
+        }
+    })
+});
 
 
 //lets activate the server
